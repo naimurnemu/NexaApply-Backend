@@ -1,5 +1,5 @@
-const Admission = require("../model/Admission");
-const College = require("../model/College");
+const Admission = require("../models/Admission");
+const College = require("../models/College");
 
 /**
  * @desc   Submit an admission form
@@ -55,7 +55,7 @@ const getUserAdmissions = async (req, res) => {
       "collegeId"
     );
 
-    if (admissions)
+    if (admissions.length > 0)
       return res.status(200).json({
         message: "User admissions fetched successfully",
         status: 200,

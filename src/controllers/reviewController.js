@@ -1,6 +1,6 @@
-const Review = require("../model/Review");
-const College = require("../model/College");
-const User = require("../model/User");
+const Review = require("../models/Review");
+const College = require("../models/College");
+const User = require("../models/User");
 
 /**
  * @desc   Add a review for a college

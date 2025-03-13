@@ -1,4 +1,4 @@
-const College = require("../models/collegeModel");
+const College = require("../models/College");
 
 /**
  * @desc   Fetch all colleges

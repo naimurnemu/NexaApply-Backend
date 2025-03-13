@@ -31,6 +31,7 @@ The following tables outline the API routes for the application, categorized by 
 | Method | API Route          | Description                                |
 |--------|--------------------|--------------------------------------------|
 | GET    | `/api/colleges`    | Fetch all colleges.                        |
+| GET    | `/api/colleges/search`    | Search colleges by keyword.                        |
 | GET    | `/api/colleges/:id`| Fetch details of a specific college.       |
 | POST   | `/api/colleges`    | Admin adds a new college.                  |
 | PUT    | `/api/colleges/:id`| Admin updates college details.             |

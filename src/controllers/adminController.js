@@ -1,4 +1,4 @@
-const Admin = require("../model/Admin");
+const Admin = require("../models/Admin");
 
 /**
  * @desc   Get all admins
@@ -31,7 +31,7 @@ const addAdmin = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const admin = await Admin.create({ name, email, password });
+    const admin = await Admin.create({ name, email, password, isAdmin: true });
 
     if (admin)
       return res.status(201).json({
