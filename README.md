@@ -11,7 +11,7 @@ The following tables outline the API routes for the application, categorized by 
 |--------|----------------------------|--------------------------------------------------|
 | POST   | `/api/auth/register`       | Register a new user.                             |
 | POST   | `/api/auth/login`          | User login, returns JWT token.                   |
-| POST   | `/api/auth/google`         | Google authentication, returns JWT token.        |
+| POST   | `/api/auth//forgot-password`  |   Forget password recover password with email    |
 | POST   | `/api/auth/reset-password` | Send password reset link.                        |
 
 ---

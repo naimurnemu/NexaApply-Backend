@@ -134,20 +134,64 @@ const loginUser = async (req, res) => {
 // };
 
 /**
- * @desc   Reset user password
- * @route  POST /api/auth/reset-password
+ * @desc   Forgot user password
+ * @route  POST /api/auth/forgot-password
  * @access Public
  */
-const resetPassword = async (req, res) => {
+const forgotPassword = async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
-
+    const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user)
+
+    if (!user) {
       return res.status(404).json({
         message: "User not found",
         status: 404,
       });
+    }
+
+    const resetToken = generateToken(user._id);
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/auth/reset-password/${resetToken}`;
+
+    await sendEmail(
+      email,
+      "Password Reset Request",
+      `You have requested to reset your password. Please make a PUT request to: ${resetUrl}`
+    );
+
+    res.status(200).json({
+      message: "Password reset link sent to email",
+      status: 200,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server internal error",
+      status: 500,
+    });
+  }
+};
+
+/**
+ * @desc   Reset user password
+ * @route  POST /api/auth/reset-password/:token
+ * @access Public
+ */
+const resetPassword = async (req, res) => {
+  try {
+    const resetToken = req.params.token;
+    const { newPassword } = req.body;
+
+    const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: 404,
+      });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
@@ -156,9 +200,9 @@ const resetPassword = async (req, res) => {
     await user.save();
 
     await sendEmail(
-      email,
+      user.email,
       "Password Reset",
-      `Your password has been reset for ${email}`
+      `Your password has been reset for ${user.email}`
     );
 
     res.json({
@@ -173,4 +217,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, resetPassword };
+module.exports = { registerUser, loginUser, forgotPassword, resetPassword };
