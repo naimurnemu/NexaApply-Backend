@@ -89,7 +89,7 @@ const loginUser = async (req, res) => {
       status: 401,
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Server internal error",
       status: 500,
     });

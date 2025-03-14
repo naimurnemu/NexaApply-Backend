@@ -8,8 +8,10 @@ const {
 
 const router = express.Router();
 
+router.post("/login", loginAdmin);
 router.get("/", authorizeAdmin, getAdmins);
 router.post("/", authorizeAdmin, addAdmin);
 router.delete("/:id", authorizeAdmin, removeAdmin);
+router.get("/:id", authorizeAdmin, getAdminProfile);
 
 module.exports = router;

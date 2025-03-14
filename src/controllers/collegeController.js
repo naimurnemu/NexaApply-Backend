@@ -8,7 +8,7 @@ const College = require("../models/College");
 const getAllColleges = async (req, res) => {
   try {
     const colleges = await College.find();
-    if (colleges?.length > 0)
+    if (colleges)
       return res.status(200).json({
         message: "Colleges fetched successfully",
         status: 200,
@@ -38,7 +38,7 @@ const searchColleges = async (req, res) => {
       : {};
 
     const colleges = await College.find({ ...keyword });
-    if (colleges.length > 0) {
+    if (colleges) {
       return res.status(200).json({
         message: "Colleges found successfully",
         status: 200,

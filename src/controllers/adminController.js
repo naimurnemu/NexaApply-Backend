@@ -1,4 +1,6 @@
 const Admin = require("../models/Admin");
+const bcrypt = require("bcryptjs");
+const generateToken = require("../utils/generateToken");
 
 /**
  * @desc   Get all admins
@@ -77,4 +79,57 @@ const removeAdmin = async (req, res) => {
   }
 };
 
-module.exports = { getAdmins, addAdmin, removeAdmin };
+/**
+ * @desc   Login an admin
+ * @route  DELETE /api/admin/login
+ * @access Public
+ */
+const loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(404).json({
+        message: "Admin not found",
+        status: 404,
+      });
+    }
+
+    if (await bcrypt.compare(password, admin.password)) {
+      return res.status(200).json({
+        message: "Admin logged in successfully",
+        status: 200,
+        data: admin,
+        token: generateToken(admin._id),
+      });
+    }
+
+    res.status(401).json({
+      message: "Invalid password",
+      status: 401,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server internal error", status: 500 });
+  }
+};
+
+const getAdminProfile = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.admin.id).select("-password");
+
+    if (admin) {
+      return res.status(200).json({
+        message: "Admin profile fetched successfully",
+        status: 200,
+        data: admin,
+      });
+    }
+
+    res.status(404).json({ message: "Admin not found", status: 404 });
+  } catch (error) {
+    res.status(500).json({ message: "Server internal error", status: 500 });
+  }
+};
+
+module.exports = { getAdmins, addAdmin, removeAdmin, loginAdmin, getAdminProfile };
